@@ -1,54 +1,61 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:/fetcher');
 
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
   userid : Number,
   username: String,
-  repoid: Number,
+  repoid: { type: Number, unique: true },
   repo_name: String,
-  repo_url: String,
+  description: String,
   forkcount: Number
 });
-
 let Repo = mongoose.model('Repo', repoSchema);
 
-
 let save = (repo, callback) => {
+  var expect = [];
 
-  console.log("repo",repo)
-  var newrepo = new Repo({
-    repoid: repo[2].id,
-    username: repo[2].full_name,
-    repo_name: repo[2].name,
-    forkcount: repo[2].forks_count,
-    repo_url: repo[2].repos_url
-  })
-  console.log("this is newrepo!!!!",newrepo);
-  // .save((err,result)=>{
-  //   if(err){
-  //     console.log("err", err);
-  //   }else{
-  //     console.log("yayayayayay")
-  //     console.log("result", result)
-  //     // callback(result._doc);
-  //   }
+  for(var i = 0; i < repo.length;i++){
+      var newrepo = new Repo({
+        repoid: repo[i].id,
+        username: repo[i].full_name,
+        repo_name: repo[i].name,
+        forkcount: repo[i].forks_count,
+        description: repo[i].description
+      })
+      newrepo.save((err,newrepo) => {
+        if (err){
+          console.log("nonono");
+          callback(err);
+        }
+        // console.log("******* this is newrepo", newrepo._doc)
+        expect.push(newrepo._doc);
+        // console.log("this is expect:", expect)
+        // console.log("expect:", expect.length);
+        // console.log("newrepo:", repo.length);
+        if(expect.length === repo.length){
+          console.log("yayayayay");
 
-
-  // console.log("this is my repo", repo)
-  // console.log("length of repos", repo.length);
-  // console.log("here is my repo!!!!!!!!!", repo)
-
-
-  //   newrepo.save(err => {
-  //     if (err){
-  //       return console.log(err)
-  //     }else{
-  //       console.log("this is newrepo: ", newrepo)
-  //     }
-  // });
+          callback(null, expect);
+        }
+    });
+  }
+}
 
 
+let get = (callback) => {
+  console.log("did you get here")
+  Repo.find().sort({forkcount: -1}).limit(25).exec((error, message)=>{
+    if(error){
+      console.log("its error")
+      callback(error);
+    }else{
+      // console.log("hahahahah", message)
+      callback(null, message)
+    }
+  })
 }
 
 
@@ -58,3 +65,4 @@ let save = (repo, callback) => {
 
 
 module.exports.save = save;
+module.exports.get = get;

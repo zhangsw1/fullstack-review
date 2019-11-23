@@ -4,6 +4,7 @@ import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +14,22 @@ class App extends React.Component {
 
   }
 
+  componentDidMount(){
+    $.ajax({
+      type: 'GET',
+      url: '/repos',
+
+      success:(data)=>{
+        console.log("lets fetch data", data)
+        this.setState({
+          repos:data,
+        })
+      },
+      error:(err) =>{
+        console.log("there is error in get ajax")
+      }
+    })
+  }
   search (username) {
     // console.log(`${term} was searched`);
     // console.log("this is from index.jsx")
@@ -20,6 +37,7 @@ class App extends React.Component {
     $.ajax({
       type: "POST",
       url: '/repos',
+      // no need to use jsonstringify, otherwise it will have {{}}
       data:  { username },
       success: () =>{
         console.log("good, successful");

@@ -26,7 +26,7 @@ app.post('/repos', function (req, res) {
       // console.log("heyheyhey")
       // console.log("this is reault", result.body)
       var finalrepo = JSON.parse(result.body);
-      console.log("this is finalrepo:",finalrepo)
+      // console.log("this is finalrepo:",finalrepo)
       db.save(finalrepo, (err1, data)=>{
         console.log("this is my data:******", data)
         if(err1){
@@ -39,24 +39,25 @@ app.post('/repos', function (req, res) {
 
 
   })
-  // getReposByUsername(req.body, totalRepos);
-  // getReposByUsername(req.body,(err, data)=>{
-  //   // console.log("something", req.body);
-  //   // console.log("type: ", JSON.parse(data))
-
-
-
-  //   if(err){
-  //     console.log(err);
-  //   }
-  // });
 
   res.send("perfect");
 });
 
 app.get('/repos', function (req, res) {
+  console.log("yes im here")
   // TODO - your code here!
   // This route should send back the top 25 repos
+  db.get((error, result)=>{
+    if(error){
+      console.log("get error!!!-from index.js")
+      throw error;
+    }else{
+     console.log("here is 25: ", result)
+      res.send(result);
+    }
+  })
+
+
 });
 
 let port = 1128;
