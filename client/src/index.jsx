@@ -26,6 +26,7 @@ class App extends React.Component {
         })
       },
       error:(err) =>{
+        console.log(err)
         console.log("there is error in get ajax")
       }
     })

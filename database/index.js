@@ -7,7 +7,7 @@ let repoSchema = mongoose.Schema({
   // TODO: your schema here!
   userid : Number,
   username: String,
-  repoid: { type: Number, unique: true },
+  repoid: { type : Number , unique : true, dropDups: true },
   repo_name: String,
   description: String,
   forkcount: Number
@@ -36,8 +36,7 @@ let save = (repo, callback) => {
         // console.log("expect:", expect.length);
         // console.log("newrepo:", repo.length);
         if(expect.length === repo.length){
-          console.log("yayayayay");
-
+          // console.log("yayayayay");
           callback(null, expect);
         }
     });
@@ -46,17 +45,20 @@ let save = (repo, callback) => {
 
 
 let get = (callback) => {
+
   console.log("did you get here")
   Repo.find().sort({forkcount: -1}).limit(25).exec((error, message)=>{
     if(error){
       console.log("its error")
       callback(error);
     }else{
-      // console.log("hahahahah", message)
+      console.log("hahahahah", message)
       callback(null, message)
     }
   })
 }
+
+// sort({forkcount: 1}).
 
 
     // TODO: Your code here
