@@ -20,6 +20,7 @@ app.post('/repos', function (req, res) {
   // console.log("req: ", req)
   // console.log("req.body: ",req.body)
   // console.log("this is my name:", username);
+
   getReposByUsername(username, (err, result)=>{
     if(err){
       console.log("please error")
@@ -33,9 +34,10 @@ app.post('/repos', function (req, res) {
         console.log("this is data!!")
         if(err1){
               console.log(err1);
+            }else{
+              // console.log("this !!is data stringify,",data)
+              res.send(JSON.stringify(data))
             }
-            console.log("this is data stringify")
-
           })
     }
 

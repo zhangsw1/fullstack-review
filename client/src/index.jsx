@@ -11,10 +11,14 @@ class App extends React.Component {
     this.state = {
       repos: []
     }
-
+    this.fetchRepos = this.fetchRepos.bind(this);
   }
 
   componentDidMount(){
+    this.fetchRepos();
+  }
+
+  fetchRepos(){
     $.ajax({
       type: 'GET',
       url: '/repos',
@@ -41,7 +45,8 @@ class App extends React.Component {
       // no need to use jsonstringify, otherwise it will have {{}}
       data:  { username },
       success: () =>{
-        console.log("good, successful");
+        console.log("search success")
+        this.fetchRepos();
       },
       error: () =>  {
         console.log("not good");

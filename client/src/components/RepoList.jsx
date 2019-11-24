@@ -7,7 +7,7 @@ const RepoList = (props) => (
 
 
     {props.repos.map(repo=>(
-      <RepoListEntry repo = {repo} key = {repo.id} onChange = {props.onChange} />
+      <RepoListEntry repo = {repo} key = {repo.id} />
     ))}
     ********************
   </div>
