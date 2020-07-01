@@ -1,70 +1,82 @@
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
-// mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:/fetcher');
-
+mongoose.connect('mongodb://127.0.0.1/fetcher', {useMongoClient: true}, (err) => {
+  if(err) {
+    console.log(err);
+  }else {
+    console.log("[Mongo DB] Successfully connected!");
+  }
+});
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
-  userid : Number,
+  repourl : { type: String, unique: true },
   username: String,
-  repoid: { type : Number , unique : true, dropDups: true },
-  repo_name: String,
-  description: String,
+  reponame : String,
   forkcount: Number
 });
+
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (repo, callback) => {
+let save = (repos,callback) => {
   var expect = [];
+  for(var i =0; i < repos.length; i++){
+    var repo = new Repo({
+      username: repos[i].owner.login,
+      reponame: repos[i].name,
+      repourl: repos[i].html_url,
+      forkcount: repos[i].forks_count
+    })
 
-  for(var i = 0; i < repo.length;i++){
-      var newrepo = new Repo({
-        repoid: repo[i].id,
-        username: repo[i].full_name,
-        repo_name: repo[i].name,
-        forkcount: repo[i].forks_count,
-        description: repo[i].description
-      })
-      newrepo.save((err,newrepo) => {
-        if (err){
-          console.log("nonono");
-          callback(err);
-        }
-        // console.log("******* this is newrepo", newrepo._doc)
-        expect.push(newrepo._doc);
-        // console.log("this is expect:", expect)
-        // console.log("expect:", expect.length);
-        // console.log("newrepo:", repo.length);
-        if(expect.length === repo.length){
-          // console.log("yayayayay");
-          callback(null, expect);
-        }
-    });
+    repo.save((err, repo)=>{
+      if(err){
+        console.log("there is an error in the repo save", err);
+      }
+      expect.push(repo);
+      // console.log("there is expect", expect)
+      if(repos.length === expect.length){
+        // console.log("there is expectafterrrr", expect)
+        callback(null, expect)
+
+      }
+    })
+
   }
+
 }
 
 
-let get = (callback) => {
-
-  console.log("did you get here")
-  Repo.find().sort({forkcount: -1}).limit(25).exec((error, message)=>{
-    if(error){
-      console.log("its error")
-      callback(error);
+let fetch =(username,callback) => {
+  Repo.find({username}).exec(function(err,data){
+    if(err){
+      console.log("fetch one user has errors: ", err);
     }else{
-      console.log("hahahahah", message)
-      callback(null, message)
+      console.log("fetch one user is good")
+      callback(null, data);
     }
   })
 }
 
-// sort({forkcount: 1}).
-
-
-    // TODO: Your code here
-    // This function should save a repo or repos to
-    // the MongoDB
-
-
+// let get = (callback) => {
+//   Repo.find().sort({forkcount:-1}).limit(25).exec(function(err,data){
+//     if(err){
+//       console.log("there is an error in get: ");
+//       callback(err);
+//     }else{
+//       console.log("getting data is perfect", data)
+//       callback(null,data);
+//     }
+//   })
+// }
+let get = () => {
+  return new Promise((resolve, reject) => {
+    Repo
+      .find({})
+      .sort({forkcount: -1})
+      .limit(25)
+      .exec((err, docs) => {
+        resolve(docs);
+      });
+  });
+}
+module.exports.fetch = fetch;
 module.exports.save = save;
 module.exports.get = get;

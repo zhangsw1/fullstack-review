@@ -1,0 +1,18 @@
+body {
+  background-color:lightblue
+}
+
+table {
+  border: 1px solid black;
+  text-align: center;
+}
+
+table{
+  width: 100%;
+}
+
+td, tr, th{
+  width: 33%;
+  text-align: center;
+}
+

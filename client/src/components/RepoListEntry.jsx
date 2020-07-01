@@ -1,13 +1,25 @@
 import React from 'react';
 
-var RepoListEntry = (props) => {
+const RepoListEntry = (props) => {
+  return (
+  <div className = 'props-description'>
+  <table>
+    <tr>
+    <td><div className ='prop-username'>
+    {props.repo.username}
+    </div></td>
+    <td><div className = 'prop-reponame'>
+    <a href={props.repo.repourl}>{props.repo.reponame}</a>
+    </div></td>
+    <td><div className = 'prop-forkcount'>
+    {props.repo.forkcount}
+    </div></td>
+  </tr>
+  </table>
 
-  return(
-    <div id = "repo-list-entry" >
-      username: {props.repo.username}  repo name: {props.repo.repo_name} repo description: {props.repo.description} forks count: {props.repo.forkcount}
-    </div>
-
+  </div>
   )
 }
 
 export default RepoListEntry;
+
