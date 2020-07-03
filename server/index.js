@@ -5,9 +5,7 @@ const db = require('../database/index.js');
 const getReposByUsername = require('../helpers/github.js').getReposByUsername;
 app.use(parser.json());
 app.use(express.static(__dirname + '/../client/dist'));
-app.use(parser.urlencoded({
-  extended: true
-}));
+app.use(express.urlencoded({extended: true}));
 
 app.post('/repos', function (req, res) {
   const { username } = req.body;
