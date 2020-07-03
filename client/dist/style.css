@@ -1,18 +1,50 @@
 body {
-  background-color:lightblue
+  background: #f0e3e3;
+  color: rgb(148, 148, 148);
+  font-family: "Lucida Console";
+  font-size: 20px;
 }
 
-table {
-  border: 1px solid black;
-  text-align: center;
+button{
+  font-family: "Lucida Console";
+  color: rgb(148, 148, 148);
 }
 
-table{
-  width: 100%;
+.title {
+  display: flex;
+  justify-content: space-between;
 }
 
-td, tr, th{
-  width: 33%;
-  text-align: center;
+.repo-list{
+  display: flex;
+  justify-content: space-between;
 }
 
+.repo-list div {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+}
+
+
+.search {
+  margin: 10px
+}
+
+.username {
+  margin: 4px;
+}
+
+div.repo-rank {
+  margin-left: 20px;
+}
+
+div.repo-name{
+  width: 150px;
+  height: 100px;
+}
+.app{
+  display: column;
+  margin: 70px;
+}
